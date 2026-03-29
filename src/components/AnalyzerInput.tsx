@@ -1,0 +1,130 @@
+'use client';
+
+import { useState, type FormEvent } from 'react';
+import { Search, Loader2, Sparkles } from 'lucide-react';
+import type { AnalyzerInputProps } from '@/lib/types';
+
+/**
+ * AnalyzerInput — The primary input interface for AlgoLens.
+ *
+ * Renders a premium dark-themed card with:
+ * - A resizable textarea for pasting LeetCode problem descriptions
+ * - A "Deconstruct" submit button with icon + loading states
+ * - Character count and input validation
+ */
+export default function AnalyzerInput({ onAnalyze, isLoading }: AnalyzerInputProps) {
+  const [problemText, setProblemText] = useState<string>('');
+
+  const trimmedText = problemText.trim();
+  const canSubmit = trimmedText.length > 0 && !isLoading;
+  const characterCount = trimmedText.length;
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!canSubmit) return;
+    onAnalyze(trimmedText);
+  };
+
+  return (
+    <div className="w-full max-w-3xl mx-auto">
+      {/* Header */}
+      <div className="text-center mb-10">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 mb-6">
+          <Sparkles className="w-3.5 h-3.5 text-violet-400" />
+          <span className="text-xs font-medium tracking-wide text-violet-300 uppercase">
+            AI-Powered Strategy Tool
+          </span>
+        </div>
+        <h1 className="text-4xl sm:text-5xl font-bold tracking-tight bg-gradient-to-b from-white via-white to-neutral-400 bg-clip-text text-transparent mb-4">
+          AlgoLens
+        </h1>
+        <p className="text-neutral-400 text-base sm:text-lg max-w-lg mx-auto leading-relaxed">
+          Paste a LeetCode problem. Get a structured blueprint — 
+          <span className="text-neutral-300"> pattern, strategy, complexity, edge cases.</span>
+        </p>
+      </div>
+
+      {/* Input Card */}
+      <form onSubmit={handleSubmit} className="relative group">
+        {/* Ambient glow behind card */}
+        <div
+          className="absolute -inset-1 rounded-2xl opacity-0 group-focus-within:opacity-100 transition-opacity duration-500 blur-xl"
+          style={{
+            background:
+              'linear-gradient(135deg, rgba(139,92,246,0.15), rgba(59,130,246,0.1), rgba(139,92,246,0.08))',
+          }}
+          aria-hidden
+        />
+
+        <div className="relative bg-neutral-900/80 backdrop-blur-xl border border-neutral-800 rounded-2xl p-6 shadow-2xl shadow-black/40">
+          {/* Textarea */}
+          <div className="relative">
+            <textarea
+              id="problem-input"
+              value={problemText}
+              onChange={(e) => setProblemText(e.target.value)}
+              disabled={isLoading}
+              placeholder="Paste a LeetCode problem description here...&#10;&#10;Example: Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target..."
+              rows={8}
+              className="w-full bg-neutral-950/60 border border-neutral-800 rounded-xl px-4 py-4 text-sm text-neutral-200 placeholder:text-neutral-600 resize-y min-h-[180px] max-h-[500px] focus:outline-none focus:ring-2 focus:ring-violet-500/40 focus:border-violet-500/50 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-mono leading-relaxed"
+            />
+          </div>
+
+          {/* Bottom Row: Character count + Submit */}
+          <div className="flex items-center justify-between mt-4">
+            <div className="flex items-center gap-3">
+              <span
+                className={`text-xs font-mono transition-colors duration-200 ${
+                  characterCount > 0 ? 'text-neutral-400' : 'text-neutral-600'
+                }`}
+              >
+                {characterCount.toLocaleString()} chars
+              </span>
+              {characterCount > 0 && characterCount < 50 && (
+                <span className="text-xs text-amber-500/80">
+                  Tip: longer descriptions yield better results
+                </span>
+              )}
+            </div>
+
+            <button
+              type="submit"
+              disabled={!canSubmit}
+              className="relative inline-flex items-center gap-2.5 px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 cursor-pointer disabled:cursor-not-allowed disabled:opacity-40 bg-gradient-to-r from-violet-600 to-blue-600 text-white hover:from-violet-500 hover:to-blue-500 hover:shadow-lg hover:shadow-violet-500/25 active:scale-[0.97] focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:ring-offset-2 focus:ring-offset-neutral-900"
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span>Analyzing...</span>
+                </>
+              ) : (
+                <>
+                  <Search className="w-4 h-4" />
+                  <span>Deconstruct</span>
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+      </form>
+
+      {/* Loading Indicator */}
+      {isLoading && (
+        <div className="mt-8 flex flex-col items-center gap-3 animate-in fade-in duration-500">
+          <div className="flex gap-1">
+            {[0, 1, 2].map((i) => (
+              <div
+                key={i}
+                className="w-2 h-2 rounded-full bg-violet-500 animate-bounce"
+                style={{ animationDelay: `${i * 150}ms` }}
+              />
+            ))}
+          </div>
+          <p className="text-sm text-neutral-500 animate-pulse">
+            Querying LLM for strategic analysis...
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
