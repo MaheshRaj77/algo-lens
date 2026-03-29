@@ -28,3 +28,12 @@ if (!supabaseAnonKey) {
 }
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+/**
+ * Admin client for secure server-side operations (NextAuth).
+ * Must ONLY be used in API routes or Server Actions, and
+ * requires the SUPABASE_SERVICE_ROLE_KEY.
+ */
+export const supabaseAdmin = process.env.SUPABASE_SERVICE_ROLE_KEY
+  ? createClient(supabaseUrl, process.env.SUPABASE_SERVICE_ROLE_KEY)
+  : supabase;

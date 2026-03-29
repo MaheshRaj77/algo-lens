@@ -104,138 +104,158 @@ export default function BlueprintView({ result, onReset }: BlueprintViewProps) {
   const difficultyStyle = DIFFICULTY_CONFIG[result.difficulty];
 
   return (
-    <div className="w-full max-w-3xl mx-auto animate-in">
-      {/* Header */}
+    <div className="w-full max-w-5xl mx-auto animate-in fade-in slide-in-from-bottom-8 duration-700">
+      {/* ── Header ── */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h2 className="text-2xl font-bold text-white mb-1 tracking-tight">
-            Blueprint
+          <h2 className="text-3xl font-extrabold text-white tracking-tight">
+            Analysis <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-violet-500">Blueprint</span>
           </h2>
-          <p className="text-sm text-neutral-500">
-            Strategic analysis complete
+          <p className="text-zinc-500 mt-1">
+            Strategic breakdown complete
           </p>
         </div>
         <button
           type="button"
           onClick={onReset}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-neutral-400 bg-neutral-800/50 border border-neutral-700/50 hover:text-white hover:bg-neutral-800 hover:border-neutral-600 transition-all duration-200 cursor-pointer"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium text-zinc-400 bg-zinc-900 border border-white/10 hover:text-white hover:bg-zinc-800 hover:border-white/20 hover:shadow-[0_0_15px_rgba(255,255,255,0.05)] transition-all"
         >
-          <RotateCcw className="w-3.5 h-3.5" />
-          Analyze Another
+          <RotateCcw className="w-4 h-4" />
+          Deconstruct Another
         </button>
       </div>
 
-      {/* ── Top Cards: Difficulty + Pattern + Complexities ────── */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
-        {/* Difficulty */}
-        <div
-          className={`flex flex-col items-center justify-center p-4 rounded-xl border ${difficultyStyle.bg} ${difficultyStyle.border} shadow-lg ${difficultyStyle.glow}`}
-        >
-          <span className="text-xs font-medium text-neutral-500 uppercase tracking-wide mb-1">
-            Difficulty
-          </span>
-          <span className={`text-lg font-bold ${difficultyStyle.text}`}>
-            {result.difficulty}
-          </span>
-        </div>
+      {/* ── Bento Grid ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 auto-rows-auto">
+        
+        {/* Top Left: Core Assessment (Span 1) */}
+        <div className="lg:col-span-1 rounded-3xl bg-zinc-900/50 border border-white/5 p-6 flex flex-col gap-6 relative overflow-hidden group hover:bg-zinc-900 transition-colors">
+          <div className="absolute inset-0 bg-gradient-to-b from-indigo-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          
+          <div className="relative z-10 flex flex-col gap-4">
+            <div className={`self-start inline-flex items-center px-4 py-1.5 rounded-full border ${difficultyStyle.bg} ${difficultyStyle.border} ${difficultyStyle.glow}`}>
+              <span className={`text-sm font-bold ${difficultyStyle.text}`}>
+                {result.difficulty}
+              </span>
+            </div>
 
-        {/* Time Complexity */}
-        <div className="flex flex-col items-center justify-center p-4 rounded-xl border border-neutral-800 bg-neutral-900/50">
-          <div className="flex items-center gap-1.5 mb-1">
-            <Clock className="w-3 h-3 text-blue-400" />
-            <span className="text-xs font-medium text-neutral-500 uppercase tracking-wide">
-              Time
-            </span>
-          </div>
-          <span className="text-sm font-semibold text-neutral-200 text-center">
-            {result.timeComplexity}
-          </span>
-        </div>
-
-        {/* Space Complexity */}
-        <div className="flex flex-col items-center justify-center p-4 rounded-xl border border-neutral-800 bg-neutral-900/50">
-          <div className="flex items-center gap-1.5 mb-1">
-            <HardDrive className="w-3 h-3 text-teal-400" />
-            <span className="text-xs font-medium text-neutral-500 uppercase tracking-wide">
-              Space
-            </span>
-          </div>
-          <span className="text-sm font-semibold text-neutral-200 text-center">
-            {result.spaceComplexity}
-          </span>
-        </div>
-      </div>
-
-      {/* ── Core Pattern ──────────────────────────────────────── */}
-      <div className="mb-6 p-5 rounded-xl border border-violet-500/20 bg-violet-500/5">
-        <div className="flex items-center gap-2 mb-2">
-          <Target className="w-4 h-4 text-violet-400" />
-          <span className="text-xs font-semibold text-violet-400 uppercase tracking-wide">
-            Core Pattern
-          </span>
-        </div>
-        <p className="text-lg font-bold text-white">{result.pattern}</p>
-      </div>
-
-      {/* ── Tags ──────────────────────────────────────────────── */}
-      <div className="mb-6">
-        <div className="flex items-center gap-2 mb-3">
-          <Tag className="w-3.5 h-3.5 text-neutral-500" />
-          <span className="text-xs font-medium text-neutral-500 uppercase tracking-wide">
-            Tags
-          </span>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {result.tags.map((tag) => (
-            <span
-              key={tag}
-              className="px-3 py-1 rounded-full text-xs font-medium bg-neutral-800 text-neutral-300 border border-neutral-700/50"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* ── Progressive Disclosure Sections ────────────────────── */}
-      <div className="space-y-3">
-        {/* Strategy Steps */}
-        <AccordionSection
-          title={`Strategy Steps (${result.strategySteps.length})`}
-          icon={Footprints}
-          accentColor="blue"
-        >
-          <ol className="space-y-3">
-            {result.strategySteps.map((step, index) => (
-              <li key={index} className="flex gap-3">
-                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-xs font-bold text-blue-400">
-                  {index + 1}
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <Target className="w-4 h-4 text-indigo-400" />
+                <span className="text-xs font-semibold text-indigo-400 uppercase tracking-wider">
+                  Core Pattern
                 </span>
-                <p className="text-sm text-neutral-300 leading-relaxed pt-0.5">
-                  {step}
-                </p>
-              </li>
-            ))}
-          </ol>
-        </AccordionSection>
+              </div>
+              <h3 className="text-2xl font-bold text-white leading-tight">
+                {result.pattern}
+              </h3>
+            </div>
+            
+            <div className="pt-4 border-t border-white/5">
+              <div className="flex items-center gap-2 mb-3">
+                <Tag className="w-3.5 h-3.5 text-zinc-500" />
+                <span className="text-xs font-medium text-zinc-500 uppercase tracking-wide">
+                  Tags
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {result.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="px-3 py-1 rounded-lg text-xs font-medium bg-zinc-800 text-zinc-300 border border-zinc-700/50"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
 
-        {/* Edge Cases */}
-        <AccordionSection
-          title={`Edge Cases (${result.edgeCases.length})`}
-          icon={AlertTriangle}
-          accentColor="amber"
-        >
-          <ul className="space-y-2.5">
-            {result.edgeCases.map((edgeCase, index) => (
-              <li key={index} className="flex items-start gap-3">
-                <Zap className="w-3.5 h-3.5 text-amber-400 mt-0.5 flex-shrink-0" />
-                <p className="text-sm text-neutral-300 leading-relaxed">
-                  {edgeCase}
-                </p>
-              </li>
-            ))}
-          </ul>
-        </AccordionSection>
+        {/* Top Right: Complexity Metrics (Span 2) */}
+        <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
+          {/* Time Complexity */}
+          <div className="rounded-3xl bg-zinc-900/50 border border-white/5 p-6 relative overflow-hidden group hover:bg-zinc-900 transition-colors hover:border-blue-500/20">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="relative z-10 h-full flex flex-col">
+              <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center mb-4">
+                <Clock className="w-5 h-5 text-blue-400" />
+              </div>
+              <span className="text-xs font-semibold text-blue-400 uppercase tracking-wider mb-2">
+                Time Complexity
+              </span>
+              <p className="text-lg font-medium text-white leading-relaxed">
+                {result.timeComplexity}
+              </p>
+            </div>
+          </div>
+
+          {/* Space Complexity */}
+          <div className="rounded-3xl bg-zinc-900/50 border border-white/5 p-6 relative overflow-hidden group hover:bg-zinc-900 transition-colors hover:border-teal-500/20">
+            <div className="absolute inset-0 bg-gradient-to-br from-teal-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="relative z-10 h-full flex flex-col">
+              <div className="w-10 h-10 rounded-xl bg-teal-500/10 flex items-center justify-center mb-4">
+                <HardDrive className="w-5 h-5 text-teal-400" />
+              </div>
+              <span className="text-xs font-semibold text-teal-400 uppercase tracking-wider mb-2">
+                Space Complexity
+              </span>
+              <p className="text-lg font-medium text-white leading-relaxed">
+                {result.spaceComplexity}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Left: Strategy Steps (Span 2) */}
+        <div className="lg:col-span-2 rounded-3xl bg-zinc-900/50 border border-white/5 p-6 lg:p-8 flex flex-col relative overflow-hidden group">
+          <div className="flex items-center gap-3 mb-6 relative z-10">
+            <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center border border-white/10">
+              <Footprints className="w-5 h-5 text-white" />
+            </div>
+            <h3 className="text-xl font-bold text-white">Execution Strategy</h3>
+          </div>
+          
+          <div className="relative z-10 max-h-[400px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent">
+            <ol className="space-y-4">
+              {result.strategySteps.map((step, index) => (
+                <li key={index} className="flex gap-4 p-4 rounded-2xl bg-zinc-800/30 border border-white/5 hover:border-white/10 transition-colors">
+                  <span className="flex-shrink-0 w-8 h-8 rounded-full bg-indigo-500/20 flex items-center justify-center text-sm font-bold text-indigo-400 shadow-[0_0_10px_rgba(99,102,241,0.2)]">
+                    {index + 1}
+                  </span>
+                  <p className="text-zinc-300 leading-relaxed pt-1">
+                    {step}
+                  </p>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
+
+        {/* Bottom Right: Edge Cases (Span 1) */}
+        <div className="lg:col-span-1 rounded-3xl bg-zinc-900/50 border border-white/5 p-6 lg:p-8 flex flex-col relative overflow-hidden group hover:border-amber-500/20 transition-colors">
+          <div className="absolute inset-0 bg-gradient-to-b from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          <div className="flex items-center gap-3 mb-6 relative z-10">
+            <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center">
+              <AlertTriangle className="w-5 h-5 text-amber-400" />
+            </div>
+            <h3 className="text-xl font-bold text-white">Edge Cases</h3>
+          </div>
+
+          <div className="relative z-10 max-h-[400px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent">
+            <ul className="space-y-3">
+              {result.edgeCases.map((edgeCase, index) => (
+                <li key={index} className="flex items-start gap-3 p-3 rounded-xl bg-amber-500/5 border border-amber-500/10">
+                  <Zap className="w-4 h-4 text-amber-400 mt-0.5 flex-shrink-0" />
+                  <p className="text-sm text-zinc-300 leading-relaxed">
+                    {edgeCase}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
       </div>
     </div>
   );

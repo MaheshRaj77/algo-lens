@@ -48,62 +48,64 @@ export default function AnalyzerInput({ onAnalyze, isLoading }: AnalyzerInputPro
       <form onSubmit={handleSubmit} className="relative group">
         {/* Ambient glow behind card */}
         <div
-          className="absolute -inset-1 rounded-2xl opacity-0 group-focus-within:opacity-100 transition-opacity duration-500 blur-xl"
+          className="absolute -inset-1 rounded-3xl opacity-0 group-focus-within:opacity-100 transition-opacity duration-500 blur-xl"
           style={{
             background:
-              'linear-gradient(135deg, rgba(139,92,246,0.15), rgba(59,130,246,0.1), rgba(139,92,246,0.08))',
+              'linear-gradient(135deg, rgba(99,102,241,0.15), rgba(139,92,246,0.1), rgba(99,102,241,0.08))',
           }}
           aria-hidden
         />
 
-        <div className="relative bg-neutral-900/80 backdrop-blur-xl border border-neutral-800 rounded-2xl p-6 shadow-2xl shadow-black/40">
-          {/* Textarea */}
-          <div className="relative">
-            <textarea
-              id="problem-input"
-              value={problemText}
-              onChange={(e) => setProblemText(e.target.value)}
-              disabled={isLoading}
-              placeholder="Paste a LeetCode problem description here...&#10;&#10;Example: Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target..."
-              rows={8}
-              className="w-full bg-neutral-950/60 border border-neutral-800 rounded-xl px-4 py-4 text-sm text-neutral-200 placeholder:text-neutral-600 resize-y min-h-[180px] max-h-[500px] focus:outline-none focus:ring-2 focus:ring-violet-500/40 focus:border-violet-500/50 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-mono leading-relaxed"
-            />
-          </div>
-
-          {/* Bottom Row: Character count + Submit */}
-          <div className="flex items-center justify-between mt-4">
-            <div className="flex items-center gap-3">
-              <span
-                className={`text-xs font-mono transition-colors duration-200 ${
-                  characterCount > 0 ? 'text-neutral-400' : 'text-neutral-600'
-                }`}
-              >
-                {characterCount.toLocaleString()} chars
-              </span>
-              {characterCount > 0 && characterCount < 50 && (
-                <span className="text-xs text-amber-500/80">
-                  Tip: longer descriptions yield better results
-                </span>
-              )}
+        <div className="relative bg-zinc-900/60 backdrop-blur-2xl border border-white/5 p-2 rounded-3xl shadow-2xl shadow-black/50">
+          <div className="bg-zinc-950/50 border border-white/5 rounded-2xl p-4 sm:p-6 transition-colors group-focus-within:border-white/10">
+            {/* Textarea */}
+            <div className="relative">
+              <textarea
+                id="problem-input"
+                value={problemText}
+                onChange={(e) => setProblemText(e.target.value)}
+                disabled={isLoading}
+                placeholder="Paste a LeetCode problem description here...&#10;&#10;Example: Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target..."
+                rows={8}
+                className="w-full bg-transparent border-none text-sm text-zinc-200 placeholder:text-zinc-600 resize-y min-h-[180px] max-h-[500px] focus:outline-none focus:ring-0 disabled:opacity-50 disabled:cursor-not-allowed font-mono leading-relaxed"
+              />
             </div>
 
-            <button
-              type="submit"
-              disabled={!canSubmit}
-              className="relative inline-flex items-center gap-2.5 px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 cursor-pointer disabled:cursor-not-allowed disabled:opacity-40 bg-gradient-to-r from-violet-600 to-blue-600 text-white hover:from-violet-500 hover:to-blue-500 hover:shadow-lg hover:shadow-violet-500/25 active:scale-[0.97] focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:ring-offset-2 focus:ring-offset-neutral-900"
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>Analyzing...</span>
-                </>
-              ) : (
-                <>
-                  <Search className="w-4 h-4" />
-                  <span>Deconstruct</span>
-                </>
-              )}
-            </button>
+            {/* Bottom Row: Character count + Submit */}
+            <div className="flex items-center justify-between mt-6 pt-4 border-t border-white/5">
+              <div className="flex items-center gap-3">
+                <span
+                  className={`text-xs font-mono transition-colors duration-200 ${
+                    characterCount > 0 ? 'text-zinc-400' : 'text-zinc-600'
+                  }`}
+                >
+                  {characterCount.toLocaleString()} chars
+                </span>
+                {characterCount > 0 && characterCount < 50 && (
+                  <span className="text-xs text-amber-500/80">
+                    Tip: longer descriptions yield better results
+                  </span>
+                )}
+              </div>
+
+              <button
+                type="submit"
+                disabled={!canSubmit}
+                className="relative inline-flex items-center gap-2.5 px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 cursor-pointer disabled:cursor-not-allowed disabled:opacity-40 bg-white text-black hover:bg-zinc-200 hover:scale-[1.02] active:scale-[0.97] focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-zinc-900 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Analyzing...</span>
+                  </>
+                ) : (
+                  <>
+                    <Search className="w-4 h-4" />
+                    <span>Deconstruct</span>
+                  </>
+                )}
+              </button>
+            </div>
           </div>
         </div>
       </form>

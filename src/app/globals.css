@@ -39,12 +39,12 @@ body::after {
   top: -40%;
   left: 50%;
   transform: translateX(-50%);
-  width: 80%;
-  height: 60%;
+  width: 100vw;
+  height: 80vh;
   background: radial-gradient(
-    ellipse at center,
-    rgba(139, 92, 246, 0.06) 0%,
-    rgba(59, 130, 246, 0.03) 40%,
+    ellipse at top,
+    rgba(99, 102, 241, 0.08) 0%,
+    rgba(139, 92, 246, 0.04) 40%,
     transparent 70%
   );
   z-index: -1;
